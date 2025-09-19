@@ -40,9 +40,9 @@ export const ServerTable = ({
             <TableHead className="font-semibold text-foreground">Main IP</TableHead>
             <TableHead className="font-semibold text-foreground">Status</TableHead>
             <TableHead className="font-semibold text-foreground">Assigned To</TableHead>
-            <TableHead className="font-semibold text-foreground">Delay (ms)</TableHead>
             <TableHead className="font-semibold text-foreground text-center">IPs</TableHead>
             <TableHead className="font-semibold text-foreground text-center">Domains</TableHead>
+            <TableHead className="font-semibold text-foreground">Notes</TableHead>
             <TableHead className="font-semibold text-foreground text-center">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -58,13 +58,6 @@ export const ServerTable = ({
                 />
               </TableCell>
               <TableCell>{getUserName(server.assignedUserId)}</TableCell>
-              <TableCell className={cn(
-                "font-mono text-sm",
-                server.delay > 1000 ? "text-error" : 
-                server.delay > 500 ? "text-warning" : "text-success"
-              )}>
-                {server.delay}
-              </TableCell>
               <TableCell className="text-center">
                 <Button
                   variant="ghost"
@@ -86,6 +79,11 @@ export const ServerTable = ({
                   <Globe className="h-4 w-4" />
                   <span className="ml-1 text-xs">{getTotalDomains(server)}</span>
                 </Button>
+              </TableCell>
+              <TableCell className="max-w-xs">
+                <div className="truncate text-sm text-muted-foreground" title={server.notes}>
+                  {server.notes || 'No notes'}
+                </div>
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-1">

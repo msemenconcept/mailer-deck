@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Server, IP, Domain } from '@/types';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -67,12 +67,12 @@ export const IPDomainModal = ({
     });
   };
 
-  const copyToClipboard = async (text: string, type: string) => {
+  const copyToClipboard = useCallback(async (text: string, type: string) => {
     try {
       await navigator.clipboard.writeText(text);
       toast({
         title: "Copied!",
-        description: `${type} domains copied to clipboard`
+        description: `${type} copied to clipboard`
       });
     } catch (err) {
       toast({
@@ -81,7 +81,16 @@ export const IPDomainModal = ({
         variant: "destructive"
       });
     }
-  };
+  }, [toast]);
+
+  const copyIP = useCallback(async (ipAddress: string) => {
+    await copyToClipboard(ipAddress, 'IP address');
+  }, [copyToClipboard]);
+
+  const copyAllIPs = useCallback(async () => {
+    const allIPs = server.ips.map(ip => ip.address).join('\n');
+    await copyToClipboard(allIPs, 'All IP addresses');
+  }, [server.ips, copyToClipboard]);
 
   const getDomainsText = (domains: Domain[], type: 'found' | 'production') => {
     return domains
@@ -135,14 +144,25 @@ export const IPDomainModal = ({
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-medium">IP Addresses ({server.ips.length})</h3>
-              <Button 
-                size="sm" 
-                onClick={() => setShowAddForm(!showAddForm)}
-                className="bg-primary hover:bg-primary-hover"
-              >
-                <Plus className="h-4 w-4 mr-1" />
-                Add IPs
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  onClick={copyAllIPs}
+                  size="sm"
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary-light"
+                >
+                  <Copy className="h-4 w-4 mr-1" />
+                  Copy All
+                </Button>
+                <Button 
+                  size="sm" 
+                  onClick={() => setShowAddForm(!showAddForm)}
+                  className="bg-primary hover:bg-primary-hover"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add IPs
+                </Button>
+              </div>
             </div>
             
             {showAddForm && (
@@ -185,9 +205,22 @@ export const IPDomainModal = ({
                         variant="ghost"
                         onClick={(e) => {
                           e.stopPropagation();
+                          copyIP(ip.address);
+                        }}
+                        className="h-6 w-6 p-0 hover:bg-primary-light hover:text-primary"
+                        title="Copy IP"
+                      >
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={(e) => {
+                          e.stopPropagation();
                           handleDeleteIP(ip);
                         }}
                         className="h-6 w-6 p-0 hover:bg-error-light hover:text-error"
+                        title="Delete IP"
                       >
                         <Trash2 className="h-3 w-3" />
                       </Button>
@@ -214,7 +247,7 @@ export const IPDomainModal = ({
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => copyToClipboard(getDomainsText(selectedIP.domains, 'found'), 'Found')}
+                        onClick={() => copyToClipboard(getDomainsText(selectedIP.domains, 'found'), 'Found domains')}
                         className="h-7 px-2 text-xs"
                       >
                         <Copy className="h-3 w-3 mr-1" />
@@ -272,7 +305,7 @@ export const IPDomainModal = ({
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => copyToClipboard(getDomainsText(selectedIP.domains, 'production'), 'Production')}
+                        onClick={() => copyToClipboard(getDomainsText(selectedIP.domains, 'production'), 'Production domains')}
                         className="h-7 px-2 text-xs"
                       >
                         <Copy className="h-3 w-3 mr-1" />

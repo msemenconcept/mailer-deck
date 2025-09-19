@@ -26,7 +26,6 @@ export const ServerModal = ({ isOpen, onClose, server, users, onSave, onUpdate }
     mainIp: server?.mainIp || '',
     status: (server?.status || 'Test') as ServerStatus,
     assignedUserId: server?.assignedUserId || '',
-    delay: server?.delay || 0,
     notes: server?.notes || ''
   });
 
@@ -65,7 +64,6 @@ export const ServerModal = ({ isOpen, onClose, server, users, onSave, onUpdate }
       mainIp: '',
       status: 'Test',
       assignedUserId: '',
-      delay: 0,
       notes: ''
     });
     onClose();
@@ -105,35 +103,21 @@ export const ServerModal = ({ isOpen, onClose, server, users, onSave, onUpdate }
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="status">Status</Label>
-              <Select 
-                value={formData.status} 
-                onValueChange={(value: ServerStatus) => setFormData(prev => ({ ...prev, status: value }))}
-              >
-                <SelectTrigger className="bg-surface border-border">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-popover border-border">
-                  {statuses.map((status) => (
-                    <SelectItem key={status} value={status}>{status}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="delay">Delay (ms)</Label>
-              <Input
-                id="delay"
-                type="number"
-                value={formData.delay}
-                onChange={(e) => setFormData(prev => ({ ...prev, delay: parseInt(e.target.value) || 0 }))}
-                min="0"
-                className="bg-surface border-border"
-              />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="status">Status</Label>
+            <Select 
+              value={formData.status} 
+              onValueChange={(value: ServerStatus) => setFormData(prev => ({ ...prev, status: value }))}
+            >
+              <SelectTrigger className="bg-surface border-border">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-popover border-border">
+                {statuses.map((status) => (
+                  <SelectItem key={status} value={status}>{status}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="space-y-2">

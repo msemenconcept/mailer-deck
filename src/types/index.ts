@@ -25,7 +25,6 @@ export interface Server {
   mainIp: string;
   status: ServerStatus;
   assignedUserId: string;
-  delay: number;
   notes: string;
   ips: IP[];
 }

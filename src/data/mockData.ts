@@ -58,7 +58,6 @@ export const mockServers: Server[] = [
     mainIp: '192.168.1.10',
     status: 'Production',
     assignedUserId: '1',
-    delay: 50,
     notes: 'Primary production server, handles main traffic',
     ips: generateIPs('1', 3)
   },
@@ -68,7 +67,6 @@ export const mockServers: Server[] = [
     mainIp: '192.168.1.15',
     status: 'Test',
     assignedUserId: '2',
-    delay: 120,
     notes: 'Testing environment for new features',
     ips: generateIPs('2', 2)
   },
@@ -78,7 +76,6 @@ export const mockServers: Server[] = [
     mainIp: '192.168.1.20',
     status: 'Down',
     assignedUserId: '3',
-    delay: 0,
     notes: 'Server down for maintenance',
     ips: generateIPs('3', 4)
   },
@@ -88,7 +85,6 @@ export const mockServers: Server[] = [
     mainIp: '192.168.1.25',
     status: 'Timed out',
     assignedUserId: '4',
-    delay: 3000,
     notes: 'Connection timeout issues, investigating',
     ips: generateIPs('4', 1)
   },
@@ -98,7 +94,6 @@ export const mockServers: Server[] = [
     mainIp: '192.168.1.30',
     status: 'Production',
     assignedUserId: '5',
-    delay: 75,
     notes: 'Secondary production server',
     ips: generateIPs('5', 5)
   },
